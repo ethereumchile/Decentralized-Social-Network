@@ -1,10 +1,15 @@
 pragma solidity ^0.4.17;
 
+/*
+Autor: Javier Guajardo
+Twitter: @EthereumChile
+Website: https://ethereumchile.cl
+*/
 
 contract DecentralizedSocialNetwork {
 
     address public owner;
-    uint public securityFee = 10000000000000000; // 0.001 ETH in WEI
+    uint public securityFee = 10000000000000000; // 0.001 ETH in WEI (We use it in Rinkeby)
 
     struct Post {
 
@@ -97,12 +102,12 @@ contract DecentralizedSocialNetwork {
 
     function changeFee (uint _fee) public onlyOwner {
 
-        securityFee = _fee; // fee in WEI
+        securityFee = _fee; // fee in WEI when Smart Contract is deployed in Testnets.
     
     }
 
-    function createAccount (uint _yearsOld, string _name, string _description) public payable pleasePayItsFree {
-
+    function createAccount (uint _yearsOld, string _name, string _description) public payable {
+        // you can add pleasePayItsFree modifier when it's in Testnet.
         bool status = profiles[msg.sender].status;
         if (status) // if profile exists...
 
@@ -115,8 +120,8 @@ contract DecentralizedSocialNetwork {
 
     }
     
-    function addFriend (address _friendsAccount) public onlyRegistered pleasePayItsFree {
-
+    function addFriend (address _friendsAccount) public onlyRegistered {
+        // you can add pleasePayItsFree modifier when it's in Testnet.
         require(!profiles[msg.sender].friends[_friendsAccount]); // require not friends currently
         profiles[msg.sender].friends[_friendsAccount] = false;
         profiles[_friendsAccount].friends[msg.sender] = false;
@@ -124,8 +129,8 @@ contract DecentralizedSocialNetwork {
         
     }
 
-    function approveRequest (address _friendsAccount) public onlyRegistered pleasePayItsFree {
-
+    function approveRequest (address _friendsAccount) public onlyRegistered {
+        // you can add pleasePayItsFree modifier when it's in Testnet.
         require(
             !profiles[msg.sender].friends[_friendsAccount] &&
             pendingRequests[msg.sender][_friendsAccount] == true
@@ -137,7 +142,8 @@ contract DecentralizedSocialNetwork {
     }
 
     function postInFriendsWall (address _friendsAccount, string _message) public payable onlyRegistered
-        pleasePayItsFree mutualFriends (_friendsAccount) {
+        mutualFriends (_friendsAccount) {
+        // you can add pleasePayItsFree modifier when it's in Testnet.
 
         Post memory _post;
         _post.message = _message;
@@ -150,16 +156,18 @@ contract DecentralizedSocialNetwork {
     }
 
     function likeFriendsPost (address _friendsAccount, uint numberPost) public 
-        pleasePayItsFree mutualFriends (_friendsAccount) postIsActive (_friendsAccount, numberPost)
+        mutualFriends (_friendsAccount) postIsActive (_friendsAccount, numberPost)
         notLikedYet (_friendsAccount, numberPost) {
+        // you can add pleasePayItsFree modifier when it's in Testnet.
 
         profiles[_friendsAccount].posts[numberPost].likes[msg.sender] = true;
 
     }
 
     function dislikeFriendsPost (address _friendsAccount, uint numberPost) public 
-        pleasePayItsFree mutualFriends (_friendsAccount) postIsActive (_friendsAccount, numberPost)
+        mutualFriends (_friendsAccount) postIsActive (_friendsAccount, numberPost)
         notDislikedYet (_friendsAccount, numberPost) {
+        // you can add pleasePayItsFree modifier when it's in Testnet.
 
         profiles[_friendsAccount].posts[numberPost].dislikes[msg.sender] = true;
 
